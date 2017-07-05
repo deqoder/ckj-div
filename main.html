@@ -20,7 +20,7 @@ for (var i = 0; i != data.length; ++i)
 {
 	ret += "<tr>";
 	ret += "<td>" + data[i].cjk + "</td>";
-	ret += "<td onclick = \"f(this)\" >";
+	ret += "<td ondblclick = \"f(this)\" >";
 	for (var j = 0; j != data[i].div.length; ++j)
 	{
 		ret += data[i].div[j];
@@ -30,15 +30,25 @@ for (var i = 0; i != data.length; ++i)
 }
 $("main").innerHTML = ret;
 $("save").onclick = function(){
-};
 
+};
+var g_last_obj;
 function f(obj)
 {
 	if (obj.innerHTML[0] != '<')
 	{
+		if (g_last_obj) g_last_obj.innerHTML = g_last_obj.children[0].value;
 		var ori_data = obj.innerHTML;
 		obj.innerHTML = "<input value=\"" + ori_data + "\" />"
+		obj.children[0].select();
+		g_last_obj = obj;
+	}
+	else {
+		obj.innerHTML = obj.children[0].value;
+		g_last_obj = null;
 	}
 }
+
+	
 </script>
 <html>
