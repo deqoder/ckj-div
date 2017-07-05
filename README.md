@@ -3,7 +3,8 @@
 ## 总体目标
 
 可方便地编辑汉字的拆分，只对不可拆字进行人工编码，自动递归生成所有汉字的码表
-*[预览](https://deqoder.github.io/ckj-div/main.html)*
+
+## [预览](https://deqoder.github.io/ckj-div/main.html)
 
 ## 已实现的功能
 ### 2017-07-05
