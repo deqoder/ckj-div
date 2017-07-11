@@ -13,3 +13,8 @@
 * 再次双击则保存，在其他行双击则之前的自动保存
 * 保存在json变量中，并dump出来，未实现保存回文件
 * 支持超过65536的unicode字符
+
+### 2017-07-11
+* 更新了数据，[CJK-UI](https://en.wikipedia.org/wiki/CJK_Unified_Ideographs)基本区(0x4e00~0x9fa5,共20902个)
+* 将数据分成两个表格：已拆的与未拆的，按“刷新”键将未拆表中的已拆字转移到已拆表（反过来也可），并显示已拆字与未拆字的个数
+* 用[FileSaver](https://github.com/eligrey/FileSaver.js/)初步实现了保存功能，但需用户手动选择目录，并且不会覆盖原来的文件（前端安全考虑，天然缺陷）
