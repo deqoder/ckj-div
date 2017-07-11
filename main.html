@@ -1,7 +1,27 @@
 <html>
 <head>
  <meta charset='utf-8' />
- <script src='data2.json' ></script>
+ <script src='filesaver.min.js'></script>
+ <style>
+ #menu{
+ 	position:fixed;
+ }
+ #table1{
+ 	position:absolute;
+ 	height:90%;
+ 	width:30%;
+ 	left:10%;
+ 	overflow:auto;
+ }
+ #table2{
+ 	position:absolute;
+ 	height:90%;
+ 	width:30%;
+ 	left:50%;
+ 	overflow:auto;
+ }
+ </style>
+ <script src='data.json' ></script>
  <script>
 var $ = function(id){
 	return document.getElementById(id);
@@ -27,11 +47,11 @@ function onSave(obj)
 		else  data[key].push(obj.innerHTML[i]);
 	}
 
-	dumpData();
+//	dumpData();
 	
 }
 var g_last_obj;
-function f(obj)
+function onEdit(obj)
 {
 	if (obj.innerHTML[0] != '<')
 	{
@@ -49,31 +69,72 @@ function f(obj)
  </script>
 </head>
 <body>
-<button id='save' >save</button>
-<table id='main' border='1' cellSpacing='0'>
-</table>
-<pre id='dump'></pre>
+<div id='menu'>
+	<button id='save' >保存</button><br/><br/>
+	<button id='refresh'>刷新</button>
+</div>
+<div>
+	<div id='table1'>
+		<table id='main' border='1' cellSpacing='0'></table>
+	</div>
+	<div id='table2'>
+		<table id='undiv' border='1' cellSpacing='0'></table>
+	</div>
+	<pre id='dump'></pre>
+</div>
 </body>
 <script>
 // onload
 // generate table
-var ret = "<tr><th>汉字</th><th>拆分</th></tr>";
-for (var key in data)
-{
-	ret += "<tr>";
-	ret += "<td>" + key + "</td>";
-	ret += "<td ondblclick = \"f(this)\" >";
-
-	for (var j = 0; j != data[key].length; ++j)
+var render = function(){
+	var ret = "<tr><th>汉字</th><th>拆分</th></tr>";
+	var count = 0;
+	for (var key in data)
 	{
-		ret += data[key][j];
+		if (data[key].length != 0) continue;
+		ret += "<tr>";
+		ret += "<td>" + key + "</td>";
+		ret += "<td ondblclick = \"onEdit(this)\" >";
+
+		for (var j = 0; j != data[key].length; ++j)
+		{
+			ret += data[key][j];
+		}
+
+		ret += "</td>";
+		ret += "</tr>";
+		++count;
 	}
 
-	ret += "</td>";
-	ret += "</tr>";
-}
-$("main").innerHTML = ret;
+	var cap = "<caption>未拆字共" + count + "个</caption>";
+	$("undiv").innerHTML =  cap + ret;
+	//////////////////////////////////
+	var ret = "<tr><th>汉字</th><th>拆分</th></tr>";
+	var count = 0;
+	for (var key in data)
+	{
+		if (data[key].length == 0) continue;
+		ret += "<tr>";
+		ret += "<td>" + key + "</td>";
+		ret += "<td ondblclick = \"onEdit(this)\" >";
+
+		for (var j = 0; j != data[key].length; ++j)
+		{
+			ret += data[key][j];
+		}
+
+		ret += "</td>";
+		ret += "</tr>";
+		++count;
+	}
+	var cap = "<caption>已拆字共" + count + "个</caption>";
+	$("main").innerHTML = cap + ret;
+};
+render();
+$("refresh").onclick = render;
 $("save").onclick = function(){
+	var blob = new Blob(['var data = ',JSON.stringify(data, null, '\t')], {type: "text/plain;charset=utf-8"});
+	saveAs(blob, "data.json");
 
 };
 </script>
